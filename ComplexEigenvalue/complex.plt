@@ -7,4 +7,4 @@ se ylab "Im \\{E\\}"
 uns colorb
 
 spl "./output/energy_complex.txt" us 1:2:3 ti "" wi pm3d
-#spl "./output/energy_complex.txt" ti "" w d 
+#spl "./output/energy_complex.txt" ti "" w l
