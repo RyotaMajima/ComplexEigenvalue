@@ -47,9 +47,9 @@ const double E_BEGIN_real = -1.2, E_END_real = -0.9;
 const int EN_real = 100;
 const double dE_real = (E_END_real - E_BEGIN_real) / EN_real;
 
-const double E_BEGIN_imag = -1.2, E_END_imag = -0.9;
+const double E_BEGIN_imag = 0.0, E_END_imag = 0.1;
 const int EN_imag = 100;
-const double dE_imag = (E_END_imag - E_BEGIN_imag) / EN_real;
+const double dE_imag = (E_END_imag - E_BEGIN_imag) / EN_imag;
 
 double i2x(int i){
     return X_BEGIN + (i + 1) * DELTA_X;
@@ -209,6 +209,14 @@ int main(){
             }
         }
 
+        for (int j = 0; j < EN_real; j++){
+            for (int k = 0; k < EN_imag; k++){
+                for (int l = 0; l < N; l++){
+                    C[j][k][l] += f[k] * polar(dt, i2E(E_BEGIN_real, j, dE_real) * (i * dt)) * exp(i2E(E_BEGIN_imag, k, dE_imag) * (i * dt));
+                }
+            }
+        }
+
         //時間発展
         timeEvolution(f, plan_for, plan_back);
     }
@@ -216,6 +224,14 @@ int main(){
     for (auto &vec : A){
         for (auto &val : vec){
             val /= T_END;
+        }
+    }
+
+    for (int i = 0; i < EN_real; i++){
+        for (int j = 0; j < EN_imag; j++){
+            for (int k = 0; k < N; k++){
+                C[i][j][k] *= exp(-i2E(E_BEGIN_imag, j, dE_imag) * T_END) / T_END;
+            }
         }
     }
 
@@ -233,6 +249,22 @@ int main(){
     }
 
     ofs.close();
+
+    ofs.open("./output/energy_complex.txt");
+    if (!ofs){
+        cerr << "file open error!" << endl;
+        exit(1);
+    }
+
+    vector<vector<double>> res_complex(EN_real, vector<double>(EN_imag));
+    for (int i = 0; i < EN_real; i++){
+        for (int j = 0; j < EN_imag; j++){
+            res_complex[i][j] = simpson(C[i][j]);
+            ofs << i2E(E_BEGIN_real, i, dE_real) << "\t";
+            ofs << i2E(E_BEGIN_imag, j, dE_imag) << "\t";
+            ofs << res_complex[i][j] << endl;
+        }
+    }
 
     vector<pair<double, int>> peak; //ピーク値とインデックスを格納するpair
     getPeaks(peak, res);
