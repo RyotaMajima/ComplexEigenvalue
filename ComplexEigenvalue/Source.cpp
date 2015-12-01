@@ -222,46 +222,6 @@ int main(){
     vector<pair<double, int>> peak; //ピーク値とインデックスを格納するpair
     getPeaks(peak, res);
 
-    int peakNum = peak.size(); //しきい値以上のピークの数
-    vvC phi(peakNum, vC(N));
-
-    for (int i = 0; i < peakNum; i++){
-        init(f);
-        getEigenfunction(phi[i], f, plan_for, plan_back, i2E(E_BEGIN, peak[i].second, dE));
-    }
-
-    vector<vector<double>> ho(3, vector<double>(N));
-    for (int i = 0; i < N; i++){
-        double x = i2x(i);
-        ho[0][i] = norm(groundState(x, 0.0));
-        ho[1][i] = norm(firstExcited(x, 0.0));
-        ho[2][i] = norm(secondExcited(x, 0.0));
-    }
-
-    //再規格化
-    for (int i = 0; i < peakNum; i++){
-        double sNorm = simpson(phi[i]);
-        for (int j = 0; j < N; j++){
-            phi[i][j] = norm(phi[i][j]) / sNorm;
-        }
-    }
-
-    ofs.open("./output/output_phi.txt");
-    if (!ofs){
-        cerr << "file open error!" << endl;
-        exit(1);
-    }
-
-    for (int i = 0; i < N; i++){
-        ofs << i2x(i) << "\t" << V(i2x(i)) << "\t";
-        for (int j = 0; j < peakNum; j++) {
-            ofs << real(phi[j][i]) << "\t" << ho[j][i] << "\t";
-        }
-        ofs << endl;
-    }
-
-    ofs.close();
-
     auto end = system_clock::now();
     auto dur = end - start;
     auto sec = duration_cast<seconds>(dur).count();
