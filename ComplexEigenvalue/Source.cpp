@@ -60,7 +60,7 @@ double secondExcited(double x, double X){
 //‰Šú‰»—pŠÖ”‚Ì’è‹`
 void init(vC &f){
     for (int i = 0; i < N; i++){
-        f[i] = firstExcited(i2x(i), X);
+        f[i] = groundState(i2x(i), X);
     }
 }
 
