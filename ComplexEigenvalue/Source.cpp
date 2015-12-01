@@ -30,7 +30,7 @@ const double L = X_END - X_BEGIN; //空間幅
 const int N = 1024; //空間分割数
 const double DELTA_X = L / N;
 
-const double T_END = 100; //終了時刻
+const double T_END = 50; //終了時刻
 const int TN = 500; //時間分割数
 const double dt = T_END / TN; //時間刻み幅
 
@@ -48,7 +48,7 @@ const int EN_real = 100;
 const double dE_real = (E_END_real - E_BEGIN_real) / EN_real;
 
 const double E_BEGIN_imag = 0.0, E_END_imag = 0.02;
-const int EN_imag = 500;
+const int EN_imag = 200;
 const double dE_imag = (E_END_imag - E_BEGIN_imag) / EN_imag;
 
 double i2x(int i){
@@ -264,6 +264,7 @@ int main(){
             ofs << i2E(E_BEGIN_imag, j, dE_imag) << "\t";
             ofs << res_complex[i][j] << endl;
         }
+        ofs << endl;
     }
 
     //vector<pair<double, int>> peak; //ピーク値とインデックスを格納するpair
