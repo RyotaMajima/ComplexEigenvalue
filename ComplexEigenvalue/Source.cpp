@@ -22,6 +22,7 @@ using namespace std::chrono;
 using Complex = complex<double>;
 using vC = vector<Complex>;
 using vvC = vector<vC>;
+using vvvC = vector<vvC>;
 inline fftw_complex* fftwcast(Complex* f){ return reinterpret_cast<fftw_complex*>(f); }
 
 const double X_BEGIN = -5.0, X_END = 25.0; //Œn‚Ì—¼’[
@@ -174,6 +175,7 @@ int main(){
     auto start = system_clock::now();
     vC f(N);
     vvC A(EN, vC(N));
+    vvvC C(EN_real, vvC(EN_imag, vC(N)));
 
     //‡•ûŒüFourier•ÏŠ·
     fftw_plan plan_for = fftw_plan_dft_1d(N, fftwcast(f.data()), fftwcast(f.data()), FFTW_FORWARD, FFTW_MEASURE);
