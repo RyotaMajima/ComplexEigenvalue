@@ -1,3 +1,8 @@
+/*
+複素エネルギー固有値の探索
+ -> 実部と虚部をパラメータにして3次元プロット
+*/
+
 #define _USE_MATH_DEFINES
 #define _CRT_SECURE_NO_WARNINGS
 #pragma comment(lib, "libfftw3-3.lib")
