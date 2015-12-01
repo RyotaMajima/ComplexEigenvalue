@@ -27,7 +27,7 @@ inline fftw_complex* fftwcast(Complex* f){ return reinterpret_cast<fftw_complex*
 
 const double X_BEGIN = -5.0, X_END = 25.0; //Œn‚Ì—¼’[
 const double L = X_END - X_BEGIN; //‹óŠÔ•
-const int N = 512; //‹óŠÔ•ªŠ„”
+const int N = 256; //‹óŠÔ•ªŠ„”
 const double DELTA_X = L / N;
 
 const double T_END = 50; //I—¹Žž
@@ -48,7 +48,7 @@ const int EN_real = 100;
 const double dE_real = (E_END_real - E_BEGIN_real) / EN_real;
 
 const double E_BEGIN_imag = 0.01, E_END_imag = 0.03;
-const int EN_imag = 200;
+const int EN_imag = 100;
 const double dE_imag = (E_END_imag - E_BEGIN_imag) / EN_imag;
 
 double i2x(int i){
@@ -276,7 +276,8 @@ int main(){
     auto min = duration_cast<minutes>(dur).count();
 
     cout << endl;
-    cout << "execution time : " << sec << "s" << endl;
+    cout << "execution time : " << sec << "s" << " ";
+    cout << '(' << min << "min)" << endl;
     cout << endl;
 
     return 0;
