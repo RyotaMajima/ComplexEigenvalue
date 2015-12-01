@@ -257,6 +257,7 @@ int main(){
     }
 
     vector<vector<double>> res_complex(EN_real, vector<double>(EN_imag));
+    ofs << scientific;
     for (int i = 0; i < EN_real; i++){
         for (int j = 0; j < EN_imag; j++){
             res_complex[i][j] = simpson(C[i][j]);
