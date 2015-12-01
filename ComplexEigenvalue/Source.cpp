@@ -42,6 +42,14 @@ const double E_BEGIN = -1.5, E_END = 1.0; //探索するエネルギーの両端
 const int EN = 1000; //エネルギー分割数
 const double dE = (E_END - E_BEGIN) / EN; //エネルギー刻み幅
 
+const double E_BEGIN_real = -1.2, E_END_real = -0.9;
+const int EN_real = 100;
+const double dE_real = (E_END_real - E_BEGIN_real) / EN_real;
+
+const double E_BEGIN_imag = -1.2, E_END_imag = -0.9;
+const int EN_imag = 100;
+const double dE_imag = (E_END_imag - E_BEGIN_imag) / EN_real;
+
 double i2x(int i){
     return X_BEGIN + (i + 1) * DELTA_X;
 }
