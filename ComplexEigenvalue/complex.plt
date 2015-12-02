@@ -1,5 +1,7 @@
 unset multiplot; reset
 
+set xran[-1.4:0]
+set yra[-0.02:0.02]
 se xlab "Re \\{E\\}"
 se ylab "Im \\{E\\}"
 uns colorb

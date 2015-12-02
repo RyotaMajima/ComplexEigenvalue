@@ -30,7 +30,7 @@ const double L = X_END - X_BEGIN; //‹óŠÔ•
 const int N = 256; //‹óŠÔ•ªŠ„”
 const double DELTA_X = L / N;
 
-const double T_END = 50; //I—¹
+const double T_END = 200; //I—¹
 const int TN = 500; //ŠÔ•ªŠ„”
 const double dt = T_END / TN; //ŠÔ‚İ•
 
@@ -254,7 +254,7 @@ int main(){
 
     ofs.close();
 
-    ofs.open("./output/energy_complex.txt");
+    ofs.open("./output/energy_complex_T_200.txt");
     if (!ofs){
         cerr << "file open error!" << endl;
         exit(1);
