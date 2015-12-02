@@ -27,7 +27,7 @@ inline fftw_complex* fftwcast(Complex* f){ return reinterpret_cast<fftw_complex*
 
 const double X_BEGIN = -5.0, X_END = 25.0; //系の両端
 const double L = X_END - X_BEGIN; //空間幅
-const int N = 512; //空間分割数
+const int N = 256; //空間分割数
 const double DELTA_X = L / N;
 
 const double T_END = 50; //終了時刻
@@ -39,17 +39,21 @@ const double X = -0.5; //初期波束の原点からのずれ
 const double X_OPT = 4.0; //光学ポテンシャルをかける位置
 const double b = 1.0 / 3.0; //3次ポテンシャルの係数
 
-const double E_BEGIN = -1.5, E_END = 1.0; //探索するエネルギーの両端
-const int EN = 1000; //エネルギー分割数
-const double dE = (E_END - E_BEGIN) / EN; //エネルギー刻み幅
+//const double E_BEGIN = -1.5, E_END = 1.0; //探索するエネルギーの両端
+//const int EN = 1000; //エネルギー分割数
+//const double dE = (E_END - E_BEGIN) / EN; //エネルギー刻み幅
 
-const double E_BEGIN_real = -1.2, E_END_real = 1.0;
+const double E_BEGIN_real = -1.4, E_END_real = 0.0;
 const int EN_real = 400;
 const double dE_real = (E_END_real - E_BEGIN_real) / EN_real;
 
 const double E_BEGIN_imag = -0.02, E_END_imag = 0.02;
 const int EN_imag = 100;
 const double dE_imag = (E_END_imag - E_BEGIN_imag) / EN_imag;
+
+const double E_BEGIN = E_BEGIN_real, E_END = E_END_real; //探索するエネルギーの両端
+const int EN = EN_real; //エネルギー分割数
+const double dE = (E_END - E_BEGIN) / EN; //エネルギー刻み幅
 
 double i2x(int i){
     return X_BEGIN + (i + 1) * DELTA_X;
