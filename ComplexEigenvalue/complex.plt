@@ -5,5 +5,5 @@ se ylab "Im \\{E\\}"
 uns colorb
 
 
-spl "./output/energy_complex.txt" us 1:2:3 ti "" wi pm3d
+pl "./output/energy_complex.txt" us 1:2:3 ti "" wi image
 #spl "./output/energy_complex.txt" ti "" w d
