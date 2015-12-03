@@ -31,7 +31,7 @@ const double L = X_END - X_BEGIN; //空間幅
 const int N = 256; //空間分割数
 const double DELTA_X = L / N;
 
-const double T_END = 75; //終了時刻
+const double T_END = 50; //終了時刻
 const int TN = 500; //時間分割数
 const double dt = T_END / TN; //時間刻み幅
 
@@ -148,6 +148,9 @@ void getPeaks(vector<pair<double, int>> &peak, vector<double> &res){
     peak.erase(remove_if(peak.begin(), peak.end(), [E_th](pair<double, int> pair) {return pair.first < E_th; }), peak.end());
 
     //得られたピーク値を表示
+    cout << endl;
+    cout << "---- Real ----" << endl;
+    cout << endl;
     cout << "index" << "\t" << "E" << "\t" << "peak value" << endl;
     cout << setprecision(3);
     for (auto pair : peak){
@@ -176,6 +179,10 @@ void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double
     peak.erase(remove_if(peak.begin(), peak.end(), [E_th](tuple<double, int, int> tuple) {return get<0>(tuple) < E_th; }), peak.end());
 
     //得られたピーク値を表示
+    cout << endl;
+    cout << "---- complex ----" << endl;
+    cout << endl;
+
     cout << "real part" << "\t" << "imag part" << "\t" << "peak value" << endl;
     cout << setprecision(5);
     for (auto tuple : peak){
@@ -213,6 +220,13 @@ int main(){
     //逆方向
     fftw_plan plan_back = fftw_plan_dft_1d(N, fftwcast(f.data()), fftwcast(f.data()), FFTW_BACKWARD, FFTW_MEASURE);
 
+    cout << "---- calculation parameters ----- " << endl;
+    cout << "size of system :" << "\t" << (int)X_BEGIN << " : " << (int)X_END << endl;
+    cout << "number of partition :" << "\t" << N << endl;
+    cout << "calc time :" << "\t" << (int)T_END << endl;
+    cout << "width of Energy (Real part) :" << "\t" << E_BEGIN_real << " : " << E_END_real << endl;
+    cout << "width of Energy (Imag part) :" << "\t" << E_BEGIN_imag << " : " << E_END_imag << endl;
+
     init(f); //初期条件f(x,0)の設定
 
     ofstream ofs;
@@ -232,12 +246,12 @@ int main(){
 
         //ofs.close();
 
-        ////積分計算
-        //for (int j = 0; j < EN; j++){
-        //    for (int k = 0; k < N; k++){
-        //        A[j][k] += f[k] * polar(dt, i2E(E_BEGIN, j, dE) * (i * dt));
-        //    }
-        //}
+        //積分計算
+        for (int j = 0; j < EN; j++){
+            for (int k = 0; k < N; k++){
+                A[j][k] += f[k] * polar(dt, i2E(E_BEGIN, j, dE) * (i * dt));
+            }
+        }
 
         for (int j = 0; j < EN_real; j++){
             for (int k = 0; k < EN_imag; k++){
@@ -251,11 +265,11 @@ int main(){
         timeEvolution(f, plan_for, plan_back);
     }
 
-    //for (auto &vec : A){
-    //    for (auto &val : vec){
-    //        val /= T_END;
-    //    }
-    //}
+    for (auto &vec : A){
+        for (auto &val : vec){
+            val /= T_END;
+        }
+    }
 
     for (int i = 0; i < EN_real; i++){
         for (int j = 0; j < EN_imag; j++){
@@ -265,20 +279,20 @@ int main(){
         }
     }
 
-    //ofs.open("./output/energy.txt");
-    //if (!ofs){
-    //    cerr << "file open error!" << endl;
-    //    exit(1);
-    //}
+    ofs.open("./output/energy.txt");
+    if (!ofs){
+        cerr << "file open error!" << endl;
+        exit(1);
+    }
 
-    //vector<double> res(EN); //結果格納用配列
-    //ofs << scientific;
-    //for (int i = 0; i < EN; i++){
-    //    res[i] = simpson(A[i]);
-    //    ofs << i2E(E_BEGIN, i, dE) << "\t" << res[i] << endl;
-    //}
+    vector<double> res(EN); //結果格納用配列
+    ofs << scientific;
+    for (int i = 0; i < EN; i++){
+        res[i] = simpson(A[i]);
+        ofs << i2E(E_BEGIN, i, dE) << "\t" << res[i] << endl;
+    }
 
-    //ofs.close();
+    ofs.close();
 
     string str = "./output/energy_complex_T_" + to_string((int)T_END) + ".txt";
     ofs.open(str);
@@ -299,8 +313,8 @@ int main(){
         ofs << endl;
     }
 
-    //vector<pair<double, int>> peak; //ピーク値とインデックスを格納するpair
-    //getPeaks(peak, res);
+    vector<pair<double, int>> peak; //ピーク値とインデックスを格納するpair
+    getPeaks(peak, res);
 
     vector<tuple<double, int, int>> peak_complex;
     getComplexPeaks(peak_complex, res_complex);
