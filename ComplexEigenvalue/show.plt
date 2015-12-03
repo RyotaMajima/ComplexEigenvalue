@@ -8,25 +8,25 @@ set multiplot layout 5,1
 #set arrow 2 from first E1,0.4 to E1,0.2 lw 2
 #set arrow 3 from first E2,0.4 to E2,0.05 lw 2
 
-set xran [-1.4:0]
-set yran [-0.02:0.02]
+#set xran [-1.4:0]
+#set yran [-0.02:0.02]
 set xla "Re \\{E\\}"
 set yla "Im \\{E\\}"
 
-set title "peak of complex energy eigenvalue(T = 50)"
+set title "peak of complex energy eigenvalue (T = 50)"
 pl "./output/energy_complex_T_50.txt" ti "" wi image
 
-set title "peak of complex energy eigenvalue(T = 75)"
+set title "peak of complex energy eigenvalue (T = 75)"
 pl "./output/energy_complex_T_75.txt" ti "" wi image
 
-set title "peak of complex energy eigenvalue(T = 100)"
+set title "peak of complex energy eigenvalue (T = 100)"
 pl "./output/energy_complex_T_100.txt" ti "" wi image
 
-set title "peak of complex energy eigenvalue(T = 200)"
+set title "peak of complex energy eigenvalue (T = 200)"
 pl "./output/energy_complex_T_200.txt" ti "" wi image
 
 set yran [-0.1:0.02]
-set title "peak of complex energy eigenvalue(T = 300)"
+set title "peak of complex energy eigenvalue (T = 300)"
 pl "./output/energy_complex_T_300.txt" ti "" wi image
 
 unset multiplot

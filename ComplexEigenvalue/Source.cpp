@@ -176,7 +176,7 @@ void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double
     peak.erase(remove_if(peak.begin(), peak.end(), [E_th](tuple<double, int, int> tuple) {return get<0>(tuple) < E_th; }), peak.end());
 
     //得られたピーク値を表示
-    cout << "real" << "\t" << "imag" << "\t" << "peak value" << endl;
+    cout << "real part" << "\t" << "imag part" << "\t" << "peak value" << endl;
     cout << setprecision(5);
     for (auto tuple : peak){
         cout << i2E(E_BEGIN_real, get<1>(tuple), dE_real) << "\t";
