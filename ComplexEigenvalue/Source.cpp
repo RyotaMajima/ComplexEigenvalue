@@ -31,7 +31,7 @@ const double L = X_END - X_BEGIN; //‹óŠÔ•
 const int N = 256; //‹óŠÔ•ªŠ„”
 const double DELTA_X = L / N;
 
-const double T_END = 75; //I—¹
+const double T_END = 300; //I—¹
 const int TN = 500; //ŠÔ•ªŠ„”
 const double dt = T_END / TN; //ŠÔ‚İ•
 
@@ -227,10 +227,10 @@ int main(){
     cout << "calculation time :" << "\t" << T_END << endl;
     cout << "width of energy (real part) :" << "\t";
     cout << E_BEGIN_real << " : " << E_END_real << "\t";
-    cout << "N :" << EN_real << endl;
+    cout << "N : " << EN_real << endl;
     cout << "width of energy (imag part) :" << "\t";
     cout << E_BEGIN_imag << " : " << E_END_imag << "\t";
-    cout << "N :" << EN_imag << endl;
+    cout << "N : " << EN_imag << endl;
 
     init(f); //‰ŠúğŒf(x,0)‚Ìİ’è
 
