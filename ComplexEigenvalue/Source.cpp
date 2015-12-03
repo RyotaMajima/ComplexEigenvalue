@@ -31,7 +31,7 @@ const double L = X_END - X_BEGIN; //空間幅
 const int N = 256; //空間分割数
 const double DELTA_X = L / N;
 
-const double T_END = 300; //終了時刻
+const double T_END = 75; //終了時刻
 const int TN = 500; //時間分割数
 const double dt = T_END / TN; //時間刻み幅
 
@@ -44,7 +44,7 @@ const double E_BEGIN_real = -1.4, E_END_real = 0.0;
 const int EN_real = 400;
 const double dE_real = (E_END_real - E_BEGIN_real) / EN_real;
 
-const double E_BEGIN_imag = -0.1, E_END_imag = 0.02;
+const double E_BEGIN_imag = -0.02, E_END_imag = 0.02;
 const int EN_imag = 100;
 const double dE_imag = (E_END_imag - E_BEGIN_imag) / EN_imag;
 
@@ -153,6 +153,35 @@ void getPeaks(vector<pair<double, int>> &peak, vector<double> &res){
     for (auto pair : peak){
         cout << pair.second << "\t" << i2E(E_BEGIN, pair.second, dE);
         cout << "\t" << pair.first << endl;
+    }
+}
+
+//複素エネルギーピークのインデックスを求める関数
+void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double>> &res){
+    //微分値が正から負に変わったところの値とインデックス
+    for (int i = 1; i < EN_real - 1; i++){
+        for (int j = 1; j < EN_imag; j++){
+            if (res[i - 1][j] < res[i][j] && res[i][j] > res[i + 1][j] && res[i][j - 1] < res[i][j] && res[i][j] > res[i][j + 1]){
+                peak.push_back(make_tuple(res[i][j], i, j));
+            }
+        }
+    }
+
+    //ピーク値の大きい順にソート
+    sort(peak.begin(), peak.end(), [](const tuple<double, int, int> &i, const tuple<double, int, int> &j){ return get<0>(i) > get<0>(j); });
+
+    double E_th = get<0>(peak[0]) / 10; //しきい値
+    cout << "threshold value : " << E_th << endl;
+    //しきい値以下の要素を削除
+    peak.erase(remove_if(peak.begin(), peak.end(), [E_th](tuple<double, int, int> tuple) {return get<0>(tuple) < E_th; }), peak.end());
+
+    //得られたピーク値を表示
+    cout << "real" << "\t" << "imag" << "\t" << "peak value" << endl;
+    cout << setprecision(5);
+    for (auto tuple : peak){
+        cout << i2E(E_BEGIN_real, get<1>(tuple), dE_real) << "\t";
+        cout << i2E(E_BEGIN_imag, get<2>(tuple), dE_imag) << "\t";
+        cout << get<0>(tuple) << endl;
     }
 }
 
@@ -272,6 +301,9 @@ int main(){
 
     //vector<pair<double, int>> peak; //ピーク値とインデックスを格納するpair
     //getPeaks(peak, res);
+
+    vector<tuple<double, int, int>> peak_complex;
+    getComplexPeaks(peak_complex, res_complex);
 
     auto end = system_clock::now();
     auto dur = end - start;
