@@ -25,7 +25,8 @@ pl "./output/energy_complex_T_100.txt" ti "" wi image
 set title "peak of complex energy eigenvalue(T = 200)"
 pl "./output/energy_complex_T_200.txt" ti "" wi image
 
-set title "peak of complex energy eigenvalue(T = 400)"
-pl "./output/energy_complex_T_400.txt" ti "" wi image
+set yran [-0.1:0.02]
+set title "peak of complex energy eigenvalue(T = 300)"
+pl "./output/energy_complex_T_300.txt" ti "" wi image
 
 unset multiplot
