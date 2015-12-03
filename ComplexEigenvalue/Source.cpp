@@ -149,7 +149,7 @@ void getPeaks(vector<pair<double, int>> &peak, vector<double> &res){
 
     //得られたピーク値を表示
     cout << endl;
-    cout << "---- Real ver. ----" << endl;
+    cout << "---- real ver. ----" << endl;
     cout << endl;
     cout << "E" << "\t" << "peak value" << endl;
     cout << setprecision(4);
@@ -179,10 +179,10 @@ void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double
 
     //得られたピーク値を表示
     cout << endl;
-    cout << "---- Complex ver. ----" << endl;
+    cout << "---- complex ver. ----" << endl;
     cout << endl;
 
-    cout << "Threshold value : " << E_th << endl;
+    cout << "threshold value : " << E_th << endl;
 
     cout << "Re" << "\t" << "Im" << "\t" << "peak value" << endl;
     cout << setprecision(4);
@@ -224,9 +224,9 @@ int main(){
     cout << "---- calculation parameters ----- " << endl;
     cout << "size of system :" << "\t" << X_BEGIN << " : " << X_END << endl;
     cout << "number of partition :" << "\t" << N << endl;
-    cout << "calc time :" << "\t" << T_END << endl;
-    cout << "width of Energy (Real part) :" << "\t" << E_BEGIN_real << " : " << E_END_real << endl;
-    cout << "width of Energy (Imag part) :" << "\t" << E_BEGIN_imag << " : " << E_END_imag << endl;
+    cout << "calculation time :" << "\t" << T_END << endl;
+    cout << "width of energy (real part) :" << "\t" << E_BEGIN_real << " : " << E_END_real << endl;
+    cout << "width of energy (imag part) :" << "\t" << E_BEGIN_imag << " : " << E_END_imag << endl;
 
     init(f); //初期条件f(x,0)の設定
 
