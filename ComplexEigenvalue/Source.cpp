@@ -87,7 +87,7 @@ double V(double x){
 
 //光学ポテンシャルの定義
 double V_opt(double x){
-    return x > X_OPT ? x*x : 0.0;
+    return x > X_OPT ? 2*x*x : 0.0;
 }
 
 //Simpson積分
@@ -151,11 +151,11 @@ void getPeaks(vector<pair<double, int>> &peak, vector<double> &res){
     cout << endl;
     cout << "---- Real ver. ----" << endl;
     cout << endl;
-    cout << "index" << "\t" << "E" << "\t" << "peak value" << endl;
-    cout << setprecision(5);
+    cout << "E" << "\t" << "peak value" << endl;
+    cout << setprecision(4);
     for (auto pair : peak){
-        cout << pair.second << "\t" << i2E(E_BEGIN, pair.second, dE);
-        cout << "\t" << pair.first << endl;
+        cout << i2E(E_BEGIN, pair.second, dE) << "\t";
+        cout << pair.first << endl;
     }
 }
 
@@ -185,7 +185,7 @@ void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double
     cout << "Threshold value : " << E_th << endl;
 
     cout << "Re" << "\t" << "Im" << "\t" << "peak value" << endl;
-    cout << setprecision(5);
+    cout << setprecision(4);
     for (auto tuple : peak){
         cout << i2E(E_BEGIN_real, get<1>(tuple), dE_real) << "\t";
         cout << i2E(E_BEGIN_imag, get<2>(tuple), dE_imag) << "\t";
@@ -222,11 +222,9 @@ int main(){
     fftw_plan plan_back = fftw_plan_dft_1d(N, fftwcast(f.data()), fftwcast(f.data()), FFTW_BACKWARD, FFTW_MEASURE);
 
     cout << "---- calculation parameters ----- " << endl;
-    cout << setprecision(2);
     cout << "size of system :" << "\t" << X_BEGIN << " : " << X_END << endl;
     cout << "number of partition :" << "\t" << N << endl;
     cout << "calc time :" << "\t" << T_END << endl;
-    cout << setprecision(3);
     cout << "width of Energy (Real part) :" << "\t" << E_BEGIN_real << " : " << E_END_real << endl;
     cout << "width of Energy (Imag part) :" << "\t" << E_BEGIN_imag << " : " << E_END_imag << endl;
 
