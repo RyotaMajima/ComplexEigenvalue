@@ -149,10 +149,10 @@ void getPeaks(vector<pair<double, int>> &peak, vector<double> &res){
 
     //得られたピーク値を表示
     cout << endl;
-    cout << "---- Real ----" << endl;
+    cout << "---- Real ver. ----" << endl;
     cout << endl;
     cout << "index" << "\t" << "E" << "\t" << "peak value" << endl;
-    cout << setprecision(3);
+    cout << setprecision(5);
     for (auto pair : peak){
         cout << pair.second << "\t" << i2E(E_BEGIN, pair.second, dE);
         cout << "\t" << pair.first << endl;
@@ -174,16 +174,17 @@ void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double
     sort(peak.begin(), peak.end(), [](const tuple<double, int, int> &i, const tuple<double, int, int> &j){ return get<0>(i) > get<0>(j); });
 
     double E_th = get<0>(peak[0]) / 10; //しきい値
-    cout << "threshold value : " << E_th << endl;
     //しきい値以下の要素を削除
     peak.erase(remove_if(peak.begin(), peak.end(), [E_th](tuple<double, int, int> tuple) {return get<0>(tuple) < E_th; }), peak.end());
 
     //得られたピーク値を表示
     cout << endl;
-    cout << "---- complex ----" << endl;
+    cout << "---- Complex ver. ----" << endl;
     cout << endl;
 
-    cout << "real part" << "\t" << "imag part" << "\t" << "peak value" << endl;
+    cout << "Threshold value : " << E_th << endl;
+
+    cout << "Re" << "\t" << "Im" << "\t" << "peak value" << endl;
     cout << setprecision(5);
     for (auto tuple : peak){
         cout << i2E(E_BEGIN_real, get<1>(tuple), dE_real) << "\t";
@@ -221,9 +222,11 @@ int main(){
     fftw_plan plan_back = fftw_plan_dft_1d(N, fftwcast(f.data()), fftwcast(f.data()), FFTW_BACKWARD, FFTW_MEASURE);
 
     cout << "---- calculation parameters ----- " << endl;
-    cout << "size of system :" << "\t" << (int)X_BEGIN << " : " << (int)X_END << endl;
+    cout << setprecision(2);
+    cout << "size of system :" << "\t" << X_BEGIN << " : " << X_END << endl;
     cout << "number of partition :" << "\t" << N << endl;
-    cout << "calc time :" << "\t" << (int)T_END << endl;
+    cout << "calc time :" << "\t" << T_END << endl;
+    cout << setprecision(3);
     cout << "width of Energy (Real part) :" << "\t" << E_BEGIN_real << " : " << E_END_real << endl;
     cout << "width of Energy (Imag part) :" << "\t" << E_BEGIN_imag << " : " << E_END_imag << endl;
 
