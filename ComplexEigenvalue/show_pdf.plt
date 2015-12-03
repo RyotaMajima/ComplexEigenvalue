@@ -38,7 +38,6 @@ set title "peak of complex energy eigenvalue (T = 200)"
 pl "./output/energy_complex_T_200.txt" ti "" wi image
 
 unset label
-
 set title "peak of complex energy eigenvalue (T = 300)"
 pl "./output/energy_complex_T_300.txt" ti "" wi image
 

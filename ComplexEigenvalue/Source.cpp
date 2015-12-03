@@ -44,7 +44,7 @@ const double E_BEGIN_real = -1.4, E_END_real = 0.0;
 const int EN_real = 400;
 const double dE_real = (E_END_real - E_BEGIN_real) / EN_real;
 
-const double E_BEGIN_imag = -0.04, E_END_imag = 0.02;
+const double E_BEGIN_imag = -0.02, E_END_imag = 0.02;
 const int EN_imag = 100;
 const double dE_imag = (E_END_imag - E_BEGIN_imag) / EN_imag;
 
@@ -225,8 +225,12 @@ int main(){
     cout << "size of system :" << "\t" << X_BEGIN << " : " << X_END << endl;
     cout << "number of partition :" << "\t" << N << endl;
     cout << "calculation time :" << "\t" << T_END << endl;
-    cout << "width of energy (real part) :" << "\t" << E_BEGIN_real << " : " << E_END_real << endl;
-    cout << "width of energy (imag part) :" << "\t" << E_BEGIN_imag << " : " << E_END_imag << endl;
+    cout << "width of energy (real part) :" << "\t";
+    cout << E_BEGIN_real << " : " << E_END_real << "\t";
+    cout << "EN_real :" << "\t" << EN_real << endl;
+    cout << "width of energy (imag part) :" << "\t";
+    cout << E_BEGIN_imag << " : " << E_END_imag << "\t";
+    cout << "EN_imag :" << "\t" << EN_imag << endl;
 
     init(f); //‰ŠúðŒf(x,0)‚ÌÝ’è
 
