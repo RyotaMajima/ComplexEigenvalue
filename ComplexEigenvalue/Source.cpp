@@ -12,6 +12,7 @@
 #include<cmath>
 #include<vector>
 #include<utility>
+#include<string>
 #include<algorithm>
 #include<functional>
 #include<complex>
@@ -30,7 +31,7 @@ const double L = X_END - X_BEGIN; //空間幅
 const int N = 256; //空間分割数
 const double DELTA_X = L / N;
 
-const double T_END = 200; //終了時刻
+const double T_END = 75; //終了時刻
 const int TN = 500; //時間分割数
 const double dt = T_END / TN; //時間刻み幅
 
@@ -38,10 +39,6 @@ const double S = 0.9; //波束の幅
 const double X = -0.5; //初期波束の原点からのずれ
 const double X_OPT = 4.0; //光学ポテンシャルをかける位置
 const double b = 1.0 / 3.0; //3次ポテンシャルの係数
-
-//const double E_BEGIN = -1.5, E_END = 1.0; //探索するエネルギーの両端
-//const int EN = 1000; //エネルギー分割数
-//const double dE = (E_END - E_BEGIN) / EN; //エネルギー刻み幅
 
 const double E_BEGIN_real = -1.4, E_END_real = 0.0;
 const int EN_real = 400;
@@ -190,28 +187,28 @@ int main(){
     init(f); //初期条件f(x,0)の設定
 
     ofstream ofs;
-    char filename[50];
+    //char filename[50];
 
     for (int i = 0; i <= TN; i++){
-        sprintf(filename, "./output/timeEvo/output%03d.txt", i);
-        ofs.open(filename);
-        if (!ofs){
-            cerr << "file open error!" << endl;
-            exit(1);
-        }
+        //sprintf(filename, "./output/timeEvo/output%03d.txt", i);
+        //ofs.open(filename);
+        //if (!ofs){
+        //    cerr << "file open error!" << endl;
+        //    exit(1);
+        //}
 
-        for (int j = 0; j < N; j++){
-            ofs << i2x(j) << "\t" << norm(f[j]) << "\t" << V(i2x(j)) << endl;
-        }
+        //for (int j = 0; j < N; j++){
+        //    ofs << i2x(j) << "\t" << norm(f[j]) << "\t" << V(i2x(j)) << endl;
+        //}
 
-        ofs.close();
+        //ofs.close();
 
-        //積分計算
-        for (int j = 0; j < EN; j++){
-            for (int k = 0; k < N; k++){
-                A[j][k] += f[k] * polar(dt, i2E(E_BEGIN, j, dE) * (i * dt));
-            }
-        }
+        ////積分計算
+        //for (int j = 0; j < EN; j++){
+        //    for (int k = 0; k < N; k++){
+        //        A[j][k] += f[k] * polar(dt, i2E(E_BEGIN, j, dE) * (i * dt));
+        //    }
+        //}
 
         for (int j = 0; j < EN_real; j++){
             for (int k = 0; k < EN_imag; k++){
@@ -225,11 +222,11 @@ int main(){
         timeEvolution(f, plan_for, plan_back);
     }
 
-    for (auto &vec : A){
-        for (auto &val : vec){
-            val /= T_END;
-        }
-    }
+    //for (auto &vec : A){
+    //    for (auto &val : vec){
+    //        val /= T_END;
+    //    }
+    //}
 
     for (int i = 0; i < EN_real; i++){
         for (int j = 0; j < EN_imag; j++){
@@ -239,22 +236,23 @@ int main(){
         }
     }
 
-    ofs.open("./output/energy.txt");
-    if (!ofs){
-        cerr << "file open error!" << endl;
-        exit(1);
-    }
+    //ofs.open("./output/energy.txt");
+    //if (!ofs){
+    //    cerr << "file open error!" << endl;
+    //    exit(1);
+    //}
 
-    vector<double> res(EN); //結果格納用配列
-    ofs << scientific;
-    for (int i = 0; i < EN; i++){
-        res[i] = simpson(A[i]);
-        ofs << i2E(E_BEGIN, i, dE) << "\t" << res[i] << endl;
-    }
+    //vector<double> res(EN); //結果格納用配列
+    //ofs << scientific;
+    //for (int i = 0; i < EN; i++){
+    //    res[i] = simpson(A[i]);
+    //    ofs << i2E(E_BEGIN, i, dE) << "\t" << res[i] << endl;
+    //}
 
-    ofs.close();
+    //ofs.close();
 
-    ofs.open("./output/energy_complex_T_200.txt");
+    string str = "./output/energy_complex_T_" + to_string((int)T_END) + ".txt";
+    ofs.open(str);
     if (!ofs){
         cerr << "file open error!" << endl;
         exit(1);
@@ -272,8 +270,8 @@ int main(){
         ofs << endl;
     }
 
-    vector<pair<double, int>> peak; //ピーク値とインデックスを格納するpair
-    getPeaks(peak, res);
+    //vector<pair<double, int>> peak; //ピーク値とインデックスを格納するpair
+    //getPeaks(peak, res);
 
     auto end = system_clock::now();
     auto dur = end - start;
