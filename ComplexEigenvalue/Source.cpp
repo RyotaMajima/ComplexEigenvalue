@@ -9,6 +9,7 @@
 #include<iostream>
 #include<iomanip>
 #include<fstream>
+#include<cstdio>
 #include<cmath>
 #include<vector>
 #include<utility>
@@ -148,7 +149,6 @@ void getPeaks(vector<pair<double, int>> &peak, vector<double> &res){
     peak.erase(remove_if(peak.begin(), peak.end(), [E_th](pair<double, int> pair) {return pair.first < E_th; }), peak.end());
 
     //得られたピーク値を表示
-    cout << endl;
     cout << "---- real ver. ----" << endl;
     cout << endl;
     cout << "E" << "\t" << "peak value" << endl;
@@ -178,7 +178,6 @@ void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double
     peak.erase(remove_if(peak.begin(), peak.end(), [E_th](tuple<double, int, int> tuple) {return get<0>(tuple) < E_th; }), peak.end());
 
     //得られたピーク値を表示
-    cout << endl;
     cout << "---- complex ver. ----" << endl;
     cout << endl;
 
@@ -221,16 +220,13 @@ int main(){
     //逆方向
     fftw_plan plan_back = fftw_plan_dft_1d(N, fftwcast(f.data()), fftwcast(f.data()), FFTW_BACKWARD, FFTW_MEASURE);
 
-    cout << "---- calculation parameters ----- " << endl;
-    cout << "size of system :" << "\t" << X_BEGIN << " : " << X_END << endl;
-    cout << "number of partition :" << "\t" << N << endl;
-    cout << "calculation time :" << "\t" << T_END << endl;
-    cout << "width of energy (real part) :" << "\t";
-    cout << E_BEGIN_real << " : " << E_END_real << "\t";
-    cout << "N : " << EN_real << endl;
-    cout << "width of energy (imag part) :" << "\t";
-    cout << E_BEGIN_imag << " : " << E_END_imag << "\t";
-    cout << "N : " << EN_imag << endl;
+    printf("---- calculation parameters ----\n");
+    printf("system size : \t [%.1f, %.1f]\n", X_BEGIN, X_END);
+    printf("partition number : %d\n", N);
+    printf("calculation time : T = %.0f\n", T_END);
+    printf("energy width (real) : [%.2f, %.2f] N = %d\n", E_BEGIN_real, E_END_real, EN_real);
+    printf("energy width (imag) : [%.2f, %.2f] N = %d\n", E_BEGIN_imag, E_END_imag, EN_imag);
+    printf("--------------------------------\n\n");
 
     init(f); //初期条件f(x,0)の設定
 
@@ -333,6 +329,6 @@ int main(){
     cout << "execution time : " << sec << "sec" << " ";
     cout << '(' << min << "min)" << endl;
     cout << endl;
-
+    
     return 0;
 }
