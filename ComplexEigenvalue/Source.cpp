@@ -88,7 +88,7 @@ double V(double x){
 
 //光学ポテンシャルの定義
 double V_opt(double x){
-    return x > X_OPT ? 10*x*x : 0.0;
+    return x > X_OPT ? x*x : 0.0;
 }
 
 //Simpson積分
