@@ -32,7 +32,7 @@ const double L = X_END - X_BEGIN; //‹óŠÔ•
 const int N = 256; //‹óŠÔ•ªŠ„”
 const double DELTA_X = L / N;
 
-const double T_END = 100; //I—¹
+const double T_END = 400; //I—¹
 const int TN = T_END * 10; //ŠÔ•ªŠ„”
 const double dt = T_END / TN; //ŠÔ‚İ•
 
@@ -220,9 +220,9 @@ int main(){
 
     printf("---- calculation parameters ----\n");
     printf("system size : \t [%.1f, %.1f]\n", X_BEGIN, X_END);
-    printf("partition number : %d\n", N);
+    printf("partition number : N = %d\n", N);
     printf("calculation time : T = %.0f\n", T_END);
-    printf("time step dt = %.1f\n", dt);
+    printf("time step : dt = %.1f\n", dt);
     printf("energy width (real) : [%.2f, %.2f] N = %d\n", E_BEGIN_real, E_END_real, EN_real);
     printf("energy width (imag) : [%.2f, %.2f] N = %d\n", E_BEGIN_imag, E_END_imag, EN_imag);
     printf("--------------------------------\n");
