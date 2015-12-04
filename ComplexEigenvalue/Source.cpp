@@ -256,7 +256,7 @@ int main(){
         for (int j = 0; j < EN_real; j++){
             for (int k = 0; k < EN_imag; k++){
                 for (int l = 0; l < N; l++){
-                    C[j][k][l] += f[k] * polar(dt, i2E(E_BEGIN_real, j, dE_real) * (i * dt)) * exp(i2E(E_BEGIN_imag, k, dE_imag) * (i * dt));
+                    C[j][k][l] += f[k] * polar(dt, i2E(E_BEGIN_real, j, dE_real) * (i * dt)) * exp(-i2E(E_BEGIN_imag, k, dE_imag) * (i * dt));
                 }
             }
         }
@@ -274,7 +274,7 @@ int main(){
     for (int i = 0; i < EN_real; i++){
         for (int j = 0; j < EN_imag; j++){
             for (int k = 0; k < N; k++){
-                C[i][j][k] *= exp(-i2E(E_BEGIN_imag, j, dE_imag) * T_END) / T_END;
+                C[i][j][k] *= exp(-fabs(i2E(E_BEGIN_imag, j, dE_imag)) * T_END) / T_END;
             }
         }
     }
