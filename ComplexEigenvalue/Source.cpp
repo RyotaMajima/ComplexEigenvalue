@@ -325,7 +325,7 @@ int main(){
 
     cout << endl;
     cout << "execution time : " << sec << "sec" << " ";
-    cout << '(' << min << "min)" << endl;
+    cout << "(" << min << "min)" << endl;
     cout << endl;
     
     return 0;
