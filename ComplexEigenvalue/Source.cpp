@@ -178,11 +178,9 @@ void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double
     peak.erase(remove_if(peak.begin(), peak.end(), [E_th](tuple<double, int, int> tuple) {return get<0>(tuple) < E_th; }), peak.end());
 
     //得られたピーク値を表示
-    cout << "---- complex ver. ----" << endl;
-    cout << endl;
+    cout << "---- complex ver. ----" << endl << endl;
 
     cout << "threshold value : " << E_th << endl;
-
     cout << "Re" << "\t" << "Im" << "\t" << "peak value" << endl;
     cout << setprecision(4);
     for (auto tuple : peak){
@@ -248,11 +246,11 @@ int main(){
         //ofs.close();
 
         //積分計算
-        for (int j = 0; j < EN; j++){
-            for (int k = 0; k < N; k++){
-                A[j][k] += f[k] * polar(dt, i2E(E_BEGIN, j, dE) * (i * dt));
-            }
-        }
+        //for (int j = 0; j < EN; j++){
+        //    for (int k = 0; k < N; k++){
+        //        A[j][k] += f[k] * polar(dt, i2E(E_BEGIN, j, dE) * (i * dt));
+        //    }
+        //}
 
         for (int j = 0; j < EN_real; j++){
             for (int k = 0; k < EN_imag; k++){
@@ -266,11 +264,11 @@ int main(){
         timeEvolution(f, plan_for, plan_back);
     }
 
-    for (auto &vec : A){
-        for (auto &val : vec){
-            val /= T_END;
-        }
-    }
+    //for (auto &vec : A){
+    //    for (auto &val : vec){
+    //        val /= T_END;
+    //    }
+    //}
 
     for (int i = 0; i < EN_real; i++){
         for (int j = 0; j < EN_imag; j++){
@@ -280,20 +278,20 @@ int main(){
         }
     }
 
-    ofs.open("./output/energy.txt");
-    if (!ofs){
-        cerr << "file open error!" << endl;
-        exit(1);
-    }
+    //ofs.open("./output/energy.txt");
+    //if (!ofs){
+    //    cerr << "file open error!" << endl;
+    //    exit(1);
+    //}
 
-    vector<double> res(EN); //結果格納用配列
-    ofs << scientific;
-    for (int i = 0; i < EN; i++){
-        res[i] = simpson(A[i]);
-        ofs << i2E(E_BEGIN, i, dE) << "\t" << res[i] << endl;
-    }
+    //vector<double> res(EN); //結果格納用配列
+    //ofs << scientific;
+    //for (int i = 0; i < EN; i++){
+    //    res[i] = simpson(A[i]);
+    //    ofs << i2E(E_BEGIN, i, dE) << "\t" << res[i] << endl;
+    //}
 
-    ofs.close();
+    //ofs.close();
 
     string str = "./output/energy_complex_T_" + to_string((int)T_END) + ".txt";
     ofs.open(str);
@@ -314,8 +312,8 @@ int main(){
         ofs << endl;
     }
 
-    vector<pair<double, int>> peak; //ピーク値とインデックスを格納するpair
-    getPeaks(peak, res);
+    //vector<pair<double, int>> peak; //ピーク値とインデックスを格納するpair
+    //getPeaks(peak, res);
 
     vector<tuple<double, int, int>> peak_complex;
     getComplexPeaks(peak_complex, res_complex);
