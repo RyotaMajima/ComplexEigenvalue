@@ -246,13 +246,6 @@ int main(){
 
         //ofs.close();
 
-        //積分計算
-        //for (int j = 0; j < EN; j++){
-        //    for (int k = 0; k < N; k++){
-        //        A[j][k] += f[k] * polar(dt, i2E(E_BEGIN, j, dE) * (i * dt));
-        //    }
-        //}
-
         for (int j = 0; j < EN_real; j++){
             for (int k = 0; k < EN_imag; k++){
                 for (int l = 0; l < N; l++){
@@ -265,12 +258,6 @@ int main(){
         timeEvolution(f, plan_for, plan_back);
     }
 
-    //for (auto &vec : A){
-    //    for (auto &val : vec){
-    //        val /= T_END;
-    //    }
-    //}
-
     for (int i = 0; i < EN_real; i++){
         for (int j = 0; j < EN_imag; j++){
             for (int k = 0; k < N; k++){
@@ -278,21 +265,6 @@ int main(){
             }
         }
     }
-
-    //ofs.open("./output/energy.txt");
-    //if (!ofs){
-    //    cerr << "file open error!" << endl;
-    //    exit(1);
-    //}
-
-    //vector<double> res(EN); //結果格納用配列
-    //ofs << scientific;
-    //for (int i = 0; i < EN; i++){
-    //    res[i] = simpson(A[i]);
-    //    ofs << i2E(E_BEGIN, i, dE) << "\t" << res[i] << endl;
-    //}
-
-    //ofs.close();
 
     string str = "./output/energy_complex_T_" + to_string((int)T_END) + ".txt";
     ofs.open(str);
@@ -313,20 +285,45 @@ int main(){
         ofs << endl;
     }
 
-    //vector<pair<double, int>> peak; //ピーク値とインデックスを格納するpair
-    //getPeaks(peak, res);
+    ofs.close();
 
-    vector<tuple<double, int, int>> peak_complex;
-    getComplexPeaks(peak_complex, res_complex);
+    vector<tuple<double, int, int>> peak_complex; //ピーク値と実部・虚部のインデックスを格納するtuple
+    getComplexPeaks(peak_complex, res_complex); //固有値のピークの探索
 
     int peakNum = peak_complex.size();
-    vvC phi(peakNum, vC(N));
+    vvC phi(peakNum, vC(N)); //固有状態格納用配列
 
+    //固有状態の抽出
     for (int i = 0; i < peakNum; i++){
         init(f);
         getComplexEigenfunction(phi[i], f, plan_for, plan_back, i2E(E_BEGIN_real, get<1>(peak_complex[i]), dE_real), i2E(E_BEGIN_imag, get<2>(peak_complex[i]), dE_imag));
     }
 
+    //比較のため調和振動子の解を出力
+    vector<vector<double>> ho(2, vector<double>(N));
+    for (int i = 0; i < N; i++){
+        double x = i2x(i);
+        ho[0][i] = norm(groundState(x, 0.0));
+        ho[1][i] = norm(firstExcited(x, 0.0));
+    }
+
+    ofs.open("./output/harmonic.txt");
+    if (!ofs){
+        cerr << "file open error!" << endl;
+        exit(1);
+    }
+
+    for (int i = 0; i < N; i++){
+        ofs << i2x(i) << "\t";
+        for (int j = 0; j < 2; j++){
+            ofs << ho[j][i] << "\t";
+        }
+        ofs << endl;
+    }
+
+    ofs.close();
+
+    //再規格化
     for (int i = 0; i < peakNum; i++){
         double sNorm = simpson(phi[i]);
         for (int j = 0; j < N; j++){
@@ -340,6 +337,7 @@ int main(){
         exit(1);
     }
 
+    //ファイル書き込み
     for (int i = 0; i < N; i++){
         ofs << i2x(i) << "\t" << V(i2x(i)) << "\t";
         for (int j = 0; j < peakNum; j++) {
