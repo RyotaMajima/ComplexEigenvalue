@@ -49,10 +49,6 @@ const double E_BEGIN_imag = -0.02, E_END_imag = 0.04;
 const int EN_imag = 100;
 const double dE_imag = (E_END_imag - E_BEGIN_imag) / EN_imag;
 
-const double E_BEGIN = E_BEGIN_real, E_END = E_END_real; //探索するエネルギーの両端
-const int EN = EN_real; //エネルギー分割数
-const double dE = (E_END - E_BEGIN) / EN; //エネルギー刻み幅
-
 double i2x(int i){
     return X_BEGIN + (i + 1) * DELTA_X;
 }
@@ -132,33 +128,6 @@ void timeEvolution(vC &f, fftw_plan plan_for, fftw_plan plan_back){
     fftw_execute(plan_back);
 }
 
-//エネルギーピークのインデックスを求める関数
-void getPeaks(vector<pair<double, int>> &peak, vector<double> &res){
-    //微分値が正から負に変わったところの値とインデックス
-    for (int i = 1; i < EN - 1; i++){
-        if (res[i - 1] < res[i] && res[i] > res[i + 1]){
-            peak.push_back(make_pair(res[i], i));
-        }
-    }
-
-    //ピーク値の大きい順にソート
-    sort(peak.begin(), peak.end(), [](const pair<double, int> &i, const pair<double, int> &j){ return i.first > j.first; });
-
-    double E_th = 0.02; //しきい値
-    //しきい値以下の要素を削除
-    peak.erase(remove_if(peak.begin(), peak.end(), [E_th](pair<double, int> pair) {return pair.first < E_th; }), peak.end());
-
-    //得られたピーク値を表示
-    cout << "---- real ver. ----" << endl;
-    cout << endl;
-    cout << "E" << "\t" << "peak value" << endl;
-    cout << setprecision(4);
-    for (auto pair : peak){
-        cout << i2E(E_BEGIN, pair.second, dE) << "\t";
-        cout << pair.first << endl;
-    }
-}
-
 //複素エネルギーピークのインデックスを求める関数
 void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double>> &res){
     //微分値が正から負に変わったところの値とインデックス
@@ -209,7 +178,6 @@ void getComplexEigenfunction(vC &phi, vC &f, fftw_plan plan_for, fftw_plan plan_
 int main(){
     auto start = system_clock::now();
     vC f(N);
-    vvC A(EN, vC(N));
     vvvC C(EN_real, vvC(EN_imag, vC(N)));
 
     //順方向Fourier変換
