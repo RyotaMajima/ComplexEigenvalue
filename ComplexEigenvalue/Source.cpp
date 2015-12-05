@@ -50,7 +50,7 @@ const int EN_imag = 100;
 const double dE_imag = (E_END_imag - E_BEGIN_imag) / EN_imag;
 
 double i2x(int i){
-    return X_BEGIN + (i + 1) * DELTA_X;
+    return X_BEGIN + i * DELTA_X;
 }
 double i2k(int i){
     return 2 * M_PI * (i < N / 2 ? i : i - N) / L;
@@ -132,7 +132,7 @@ void timeEvolution(vC &f, fftw_plan plan_for, fftw_plan plan_back){
 void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double>> &res){
     //微分値が正から負に変わったところの値とインデックス
     for (int i = 1; i < EN_real - 1; i++){
-        for (int j = 1; j < EN_imag; j++){
+        for (int j = 1; j < EN_imag - 1; j++){
             if (res[i - 1][j] < res[i][j] && res[i][j] > res[i + 1][j] && res[i][j - 1] < res[i][j] && res[i][j] > res[i][j + 1]){
                 peak.push_back(make_tuple(res[i][j], i, j));
             }
@@ -145,6 +145,8 @@ void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double
     double E_th = get<0>(peak[0]) / 10; //しきい値
     //しきい値以下の要素を削除
     peak.erase(remove_if(peak.begin(), peak.end(), [E_th](tuple<double, int, int> tuple) {return get<0>(tuple) < E_th; }), peak.end());
+
+    sort(peak.begin(), peak.end(), [](const tuple<double, int, int> &i, const tuple<double, int, int> &j){ return get<1>(i) < get<1>(j); });
 
     //得られたピーク値を表示
     cout << "---- complex ver. ----" << endl << endl;
