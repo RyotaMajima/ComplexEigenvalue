@@ -29,7 +29,7 @@ inline fftw_complex* fftwcast(Complex* f){ return reinterpret_cast<fftw_complex*
 
 const double X_BEGIN = -5.0, X_END = 25.0; //Œn‚Ì—¼’[
 const double L = X_END - X_BEGIN; //‹óŠÔ•
-const int N = 512; //‹óŠÔ•ªŠ„”
+const int N = 256; //‹óŠÔ•ªŠ„”
 const double DELTA_X = L / N;
 
 const double T_END = 50; //I—¹Žž
@@ -45,7 +45,7 @@ const double E_BEGIN_real = -1.3, E_END_real = 0.7;
 const int EN_real = 400;
 const double dE_real = (E_END_real - E_BEGIN_real) / EN_real;
 
-const double E_BEGIN_imag = -0.02, E_END_imag = 0.04;
+const double E_BEGIN_imag = -0.02, E_END_imag = 0.02;
 const int EN_imag = 100;
 const double dE_imag = (E_END_imag - E_BEGIN_imag) / EN_imag;
 
@@ -53,7 +53,7 @@ double i2x(int i){
     return X_BEGIN + i * DELTA_X;
 }
 double i2k(int i){
-    return 2 * M_PI * (i2x(i) < i2x(N / 2) ? i : i - N) / L;
+    return 2 * M_PI * ((i < N / 2)? i : i - N) / L;
 }
 double i2E(double begin, int index, double width){
     return begin + index * width;
@@ -200,21 +200,21 @@ int main(){
     init(f); //‰ŠúðŒf(x,0)‚ÌÝ’è
 
     ofstream ofs;
-    //char filename[50];
+    char filename[50];
 
     for (int i = 0; i <= TN; i++){
-        //sprintf(filename, "./output/timeEvo/output%03d.txt", i);
-        //ofs.open(filename);
-        //if (!ofs){
-        //    cerr << "file open error!" << endl;
-        //    exit(1);
-        //}
+        sprintf(filename, "./output/timeEvo/output%03d.txt", i);
+        ofs.open(filename);
+        if (!ofs){
+            cerr << "file open error!" << endl;
+            exit(1);
+        }
 
-        //for (int j = 0; j < N; j++){
-        //    ofs << i2x(j) << "\t" << norm(f[j]) << "\t" << V(i2x(j)) << endl;
-        //}
+        for (int j = 0; j < N; j++){
+            ofs << i2x(j) << "\t" << norm(f[j]) << "\t" << V(i2x(j)) << endl;
+        }
 
-        //ofs.close();
+        ofs.close();
 
         for (int j = 0; j < EN_real; j++){
             for (int k = 0; k < EN_imag; k++){
