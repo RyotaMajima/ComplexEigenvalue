@@ -41,7 +41,7 @@ const double X = -0.5; //初期波束の原点からのずれ
 const double X_OPT = 4.0; //光学ポテンシャルをかける位置
 const double b = 1.0 / 3.0; //3次ポテンシャルの係数
 
-const double E_BEGIN_real = -2.0, E_END_real = 0.0;
+const double E_BEGIN_real = -1.3, E_END_real = 0.7;
 const int EN_real = 400;
 const double dE_real = (E_END_real - E_BEGIN_real) / EN_real;
 
