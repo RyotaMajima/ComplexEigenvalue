@@ -1,7 +1,7 @@
 unset multiplot; reset
 T_END = 50
 TN = T_END * 10
-set xran [-5:10]
+set xran [-5:5]
 set yran [-2:3]
 set grid
 set xla "x"
