@@ -4,16 +4,16 @@ set output "./graph/output.pdf"
 set multiplot layout 4,1
 
 set xran [-2.5:0.7]
-set yran [-0.02:0.02]
+set yran [-0.02:0.04]
 z_max = 2.5
-set zran [0:z_max]; set cbra [0:z_max]
+#set zran [0:z_max]; set cbra [0:z_max]
 set xla "Re \\{E\\}"
 set yla "Im \\{E\\}"
 
 set label 1 \
  "----- calculation parameters -----\n \
   system size : [-5.0, 25.0]\n \
-  partition number : N = 256\n \
+  partition number : N = 512\n \
   time step : dt = 0.1 (fixed)\n \
   energy part num (real) : N = 400\n \
   energy part num (imag) : N = 100\n \
