@@ -53,7 +53,7 @@ double i2x(int i){
     return X_BEGIN + i * DELTA_X;
 }
 double i2k(int i){
-    return 2 * M_PI * (i < N / 2 ? i : i - N) / L;
+    return 2 * M_PI * (i2x(i) < L / 2 ? i : i - N) / L;
 }
 double i2E(double begin, int index, double width){
     return begin + index * width;
