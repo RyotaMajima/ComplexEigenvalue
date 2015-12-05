@@ -6,7 +6,7 @@ set multiplot layout 4,1
 set xran [-2.5:0.7]
 set yran [-0.02:0.02]
 z_max = 2.5
-#set zran [0:z_max]; set cbra [0:z_max]
+set zran [0:z_max]; set cbra [0:z_max]
 set xla "Re \\{E\\}"
 set yla "Im \\{E\\}"
 

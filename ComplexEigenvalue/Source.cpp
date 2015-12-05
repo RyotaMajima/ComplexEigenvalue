@@ -32,7 +32,7 @@ const double L = X_END - X_BEGIN; //空間幅
 const int N = 256; //空間分割数
 const double DELTA_X = L / N;
 
-const double T_END = 400; //終了時刻
+const double T_END = 50; //終了時刻
 const int TN = T_END * 10; //時間分割数
 const double dt = T_END / TN; //時間刻み幅
 
@@ -191,18 +191,18 @@ void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double
 }
 
 //固有状態の抽出
-void getEigenfunction(vC &phi, vC &f, fftw_plan plan_for, fftw_plan plan_back, double energy){
+void getComplexEigenfunction(vC &phi, vC &f, fftw_plan plan_for, fftw_plan plan_back, double energy_real, double energy_imag){
     for (int i = 0; i <= TN; i++){
         //積分計算
         for (int j = 0; j < N; j++){
-            phi[j] += f[j] * polar(dt, energy * (i * dt));
+            phi[j] += f[j] * polar(dt, energy_real * (i * dt)) * exp(-energy_imag * (i * dt));
         }
 
         timeEvolution(f, plan_for, plan_back);
     }
 
     for (auto &val : phi){
-        val /= T_END;
+        val *= exp(-fabs(energy_imag) * T_END) / T_END;
     }
 }
 
@@ -318,6 +318,37 @@ int main(){
 
     vector<tuple<double, int, int>> peak_complex;
     getComplexPeaks(peak_complex, res_complex);
+
+    int peakNum = peak_complex.size();
+    vvC phi(peakNum, vC(N));
+
+    for (int i = 0; i < peakNum; i++){
+        init(f);
+        getComplexEigenfunction(phi[i], f, plan_for, plan_back, i2E(E_BEGIN_real, get<1>(peak_complex[i]), dE_real), i2E(E_BEGIN_imag, get<2>(peak_complex[i]), dE_imag));
+    }
+
+    for (int i = 0; i < peakNum; i++){
+        double sNorm = simpson(phi[i]);
+        for (int j = 0; j < N; j++){
+            phi[i][j] = norm(phi[i][j]) / sNorm;
+        }
+    }
+
+    ofs.open("./output/output_phi.txt");
+    if (!ofs){
+        cerr << "file open error!" << endl;
+        exit(1);
+    }
+
+    for (int i = 0; i < N; i++){
+        ofs << i2x(i) << "\t" << V(i2x(i)) << "\t";
+        for (int j = 0; j < peakNum; j++) {
+            ofs << real(phi[j][i]) << "\t";
+        }
+        ofs << endl;
+    }
+
+    ofs.close();
 
     auto end = system_clock::now();
     auto dur = end - start;
