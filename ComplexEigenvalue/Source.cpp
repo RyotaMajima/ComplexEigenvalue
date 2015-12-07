@@ -72,21 +72,21 @@ double secondExcited(double x, double X){
 //初期化用関数の定義
 void init(vC &f){
     for (int i = 0; i < N; i++){
-        f[i] = firstExcited(i2x(i) + X_BEGIN, X - X_BEGIN);
+        f[i] = firstExcited(i2x(i) - fabs(X_BEGIN), X);
     }
 }
 
 //ポテンシャル関数の定義
 double V(double x){
-    double X = x + X_BEGIN;
+    double X = x - fabs(X_BEGIN);
     return (1.0 / 2.0) * X*X - (b / 3.0) * X*X*X - 1.0 / (6 * b * b);
     //return (1.0 / 2.0) * x*x;
 }
 
 //光学ポテンシャルの定義
 double V_opt(double x){
-    double X = x + X_BEGIN;
-    return X > (X_OPT - X_BEGIN) ? X*X : 0.0;
+    double X = x - fabs(X_BEGIN);
+    return (x > X_OPT + fabs(X_BEGIN))? X*X : 0.0;
 }
 
 //Simpson積分
@@ -110,12 +110,12 @@ double simpson(vC &f){
 void timeEvolution(vC &f, fftw_plan plan_for, fftw_plan plan_back){
     //ポテンシャル部分の計算
     for (int j = 0; j < N; j++){
-        f[j] *= polar(1.0 / N, -V(i2x(j) - X_BEGIN) * dt); // 1/Nは正規化因子
+        f[j] *= polar(1.0 / N, -V(i2x(j)) * dt); // 1/Nは正規化因子
     }
 
     //光学ポテンシャル部分の計算
     for (int j = 0; j < N; j++){
-        f[j] *= exp(-V_opt(i2x(j) - X_BEGIN) * dt);
+        f[j] *= exp(-V_opt(i2x(j)) * dt);
     }
 
     //f(x, t) -> g(k, t)
@@ -214,7 +214,7 @@ int main(){
         }
 
         for (int j = 0; j < N; j++){
-            ofs << i2x(j) + X_BEGIN << "\t" << norm(f[j]) << "\t" << V(i2x(j) + X_BEGIN) << endl;
+            ofs << i2x(j) << "\t" << norm(f[j]) << "\t" << V(i2x(j)) << endl;
         }
 
         ofs.close();
