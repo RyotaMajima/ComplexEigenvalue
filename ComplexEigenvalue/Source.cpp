@@ -50,7 +50,7 @@ const int EN_imag = 400;
 const double dE_imag = (E_END_imag - E_BEGIN_imag) / EN_imag;
 
 double i2x(int i){
-    return X_BEGIN + i * DELTA_X;
+    return i * DELTA_X;
 }
 double i2k(int i){
     return 2 * M_PI * ((i < N / 2)? i : i - N) / L;
@@ -72,19 +72,21 @@ double secondExcited(double x, double X){
 //初期化用関数の定義
 void init(vC &f){
     for (int i = 0; i < N; i++){
-        f[i] = firstExcited(i2x(i), X);
+        f[i] = firstExcited(i2x(i) + X_BEGIN, X - X_BEGIN);
     }
 }
 
 //ポテンシャル関数の定義
 double V(double x){
-    return (1.0 / 2.0) * x*x - (b / 3.0) * x*x*x - 1.0 / (6 * b * b);
+    double X = x + X_BEGIN;
+    return (1.0 / 2.0) * X*X - (b / 3.0) * X*X*X - 1.0 / (6 * b * b);
     //return (1.0 / 2.0) * x*x;
 }
 
 //光学ポテンシャルの定義
 double V_opt(double x){
-    return x > X_OPT ? x*x : 0.0;
+    double X = x + X_BEGIN;
+    return X > (X_OPT - X_BEGIN) ? X*X : 0.0;
 }
 
 //Simpson積分
@@ -108,12 +110,12 @@ double simpson(vC &f){
 void timeEvolution(vC &f, fftw_plan plan_for, fftw_plan plan_back){
     //ポテンシャル部分の計算
     for (int j = 0; j < N; j++){
-        f[j] *= polar(1.0 / N, -V(i2x(j)) * dt); // 1/Nは正規化因子
+        f[j] *= polar(1.0 / N, -V(i2x(j) - X_BEGIN) * dt); // 1/Nは正規化因子
     }
 
     //光学ポテンシャル部分の計算
     for (int j = 0; j < N; j++){
-        f[j] *= exp(-V_opt(i2x(j)) * dt);
+        f[j] *= exp(-V_opt(i2x(j) - X_BEGIN) * dt);
     }
 
     //f(x, t) -> g(k, t)
@@ -212,113 +214,113 @@ int main(){
         }
 
         for (int j = 0; j < N; j++){
-            ofs << i2x(j) << "\t" << norm(f[j]) << "\t" << V(i2x(j)) << endl;
+            ofs << i2x(j) + X_BEGIN << "\t" << norm(f[j]) << "\t" << V(i2x(j) + X_BEGIN) << endl;
         }
 
         ofs.close();
 
-        for (int j = 0; j <= EN_real; j++){
-            for (int k = 0; k <= EN_imag; k++){
-                for (int l = 0; l < N; l++){
-                    C[j][k][l] += f[k] * polar(dt, i2E(E_BEGIN_real, j, dE_real) * (i * dt)) * exp(-i2E(E_BEGIN_imag, k, dE_imag) * (i * dt));
-                }
-            }
-        }
+        //for (int j = 0; j <= EN_real; j++){
+        //    for (int k = 0; k <= EN_imag; k++){
+        //        for (int l = 0; l < N; l++){
+        //            C[j][k][l] += f[k] * polar(dt, i2E(E_BEGIN_real, j, dE_real) * (i * dt)) * exp(-i2E(E_BEGIN_imag, k, dE_imag) * (i * dt));
+        //        }
+        //    }
+        //}
 
         //時間発展
         timeEvolution(f, plan_for, plan_back);
     }
 
-    for (int i = 0; i <= EN_real; i++){
-        for (int j = 0; j <= EN_imag; j++){
-            for (int k = 0; k < N; k++){
-                C[i][j][k] *= exp(-fabs(i2E(E_BEGIN_imag, j, dE_imag)) * T_END) / T_END;
-            }
-        }
-    }
+    //for (int i = 0; i <= EN_real; i++){
+    //    for (int j = 0; j <= EN_imag; j++){
+    //        for (int k = 0; k < N; k++){
+    //            C[i][j][k] *= exp(-fabs(i2E(E_BEGIN_imag, j, dE_imag)) * T_END) / T_END;
+    //        }
+    //    }
+    //}
 
-    string str = "./output/energy_complex_T_" + to_string((int)T_END) + ".txt";
-    ofs.open(str);
-    if (!ofs){
-        cerr << "file open error!" << endl;
-        exit(1);
-    }
+    //string str = "./output/energy_complex_T_" + to_string((int)T_END) + ".txt";
+    //ofs.open(str);
+    //if (!ofs){
+    //    cerr << "file open error!" << endl;
+    //    exit(1);
+    //}
 
-    vector<vector<double>> res_complex(EN_real + 1, vector<double>(EN_imag + 1));
-    ofs << scientific;
-    for (int i = 0; i <= EN_real; i++){
-        for (int j = 0; j <= EN_imag; j++){
-            res_complex[i][j] = simpson(C[i][j]);
-            ofs << i2E(E_BEGIN_real, i, dE_real) << "\t";
-            ofs << i2E(E_BEGIN_imag, j, dE_imag) << "\t";
-            ofs << res_complex[i][j] << endl;
-        }
-        ofs << endl;
-    }
+    //vector<vector<double>> res_complex(EN_real + 1, vector<double>(EN_imag + 1));
+    //ofs << scientific;
+    //for (int i = 0; i <= EN_real; i++){
+    //    for (int j = 0; j <= EN_imag; j++){
+    //        res_complex[i][j] = simpson(C[i][j]);
+    //        ofs << i2E(E_BEGIN_real, i, dE_real) << "\t";
+    //        ofs << i2E(E_BEGIN_imag, j, dE_imag) << "\t";
+    //        ofs << res_complex[i][j] << endl;
+    //    }
+    //    ofs << endl;
+    //}
 
-    ofs.close();
+    //ofs.close();
 
-    vector<tuple<double, int, int>> peak_complex; //ピーク値と実部・虚部のインデックスを格納するtuple
-    getComplexPeaks(peak_complex, res_complex); //固有値のピークの探索
+    //vector<tuple<double, int, int>> peak_complex; //ピーク値と実部・虚部のインデックスを格納するtuple
+    //getComplexPeaks(peak_complex, res_complex); //固有値のピークの探索
 
-    int peakNum = peak_complex.size();
-    vvC phi(peakNum, vC(N)); //固有状態格納用配列
+    //int peakNum = peak_complex.size();
+    //vvC phi(peakNum, vC(N)); //固有状態格納用配列
 
-    //固有状態の抽出
-    for (int i = 0; i < peakNum; i++){
-        init(f);
-        getComplexEigenfunction(phi[i], f, plan_for, plan_back, i2E(E_BEGIN_real, get<1>(peak_complex[i]), dE_real), i2E(E_BEGIN_imag, get<2>(peak_complex[i]), dE_imag));
-    }
+    ////固有状態の抽出
+    //for (int i = 0; i < peakNum; i++){
+    //    init(f);
+    //    getComplexEigenfunction(phi[i], f, plan_for, plan_back, i2E(E_BEGIN_real, get<1>(peak_complex[i]), dE_real), i2E(E_BEGIN_imag, get<2>(peak_complex[i]), dE_imag));
+    //}
 
-    //比較のため調和振動子の解を出力
-    vector<vector<double>> ho(2, vector<double>(N));
-    for (int i = 0; i < N; i++){
-        double x = i2x(i);
-        ho[0][i] = norm(groundState(x, 0.0));
-        ho[1][i] = norm(firstExcited(x, 0.0));
-    }
+    ////比較のため調和振動子の解を出力
+    //vector<vector<double>> ho(2, vector<double>(N));
+    //for (int i = 0; i < N; i++){
+    //    double x = i2x(i) + X_BEGIN;
+    //    ho[0][i] = norm(groundState(x, 0.0));
+    //    ho[1][i] = norm(firstExcited(x, 0.0));
+    //}
 
-    ofs.open("./output/harmonic.txt");
-    if (!ofs){
-        cerr << "file open error!" << endl;
-        exit(1);
-    }
+    //ofs.open("./output/harmonic.txt");
+    //if (!ofs){
+    //    cerr << "file open error!" << endl;
+    //    exit(1);
+    //}
 
-    for (int i = 0; i < N; i++){
-        ofs << i2x(i) << "\t";
-        for (int j = 0; j < 2; j++){
-            ofs << ho[j][i] << "\t";
-        }
-        ofs << endl;
-    }
+    //for (int i = 0; i < N; i++){
+    //    ofs << i2x(i) + X_BEGIN << "\t";
+    //    for (int j = 0; j < 2; j++){
+    //        ofs << ho[j][i] << "\t";
+    //    }
+    //    ofs << endl;
+    //}
 
-    ofs.close();
+    //ofs.close();
 
-    //再規格化
-    for (int i = 0; i < peakNum; i++){
-        double sNorm = simpson(phi[i]);
-        for (int j = 0; j < N; j++){
-            phi[i][j] = norm(phi[i][j]) / sNorm;
-        }
-    }
+    ////再規格化
+    //for (int i = 0; i < peakNum; i++){
+    //    double sNorm = simpson(phi[i]);
+    //    for (int j = 0; j < N; j++){
+    //        phi[i][j] = norm(phi[i][j]) / sNorm;
+    //    }
+    //}
 
-    str = "./output/phi_" + to_string((int)T_END) + ".txt";
-    ofs.open(str);
-    if (!ofs){
-        cerr << "file open error!" << endl;
-        exit(1);
-    }
+    //str = "./output/phi_" + to_string((int)T_END) + ".txt";
+    //ofs.open(str);
+    //if (!ofs){
+    //    cerr << "file open error!" << endl;
+    //    exit(1);
+    //}
 
-    //ファイル書き込み
-    for (int i = 0; i < N; i++){
-        ofs << i2x(i) << "\t" << V(i2x(i)) << "\t";
-        for (int j = 0; j < peakNum; j++) {
-            ofs << real(phi[j][i]) << "\t";
-        }
-        ofs << endl;
-    }
+    ////ファイル書き込み
+    //for (int i = 0; i < N; i++){
+    //    ofs << i2x(i) + X_BEGIN << "\t" << V(i2x(i) + X_BEGIN) << "\t";
+    //    for (int j = 0; j < peakNum; j++) {
+    //        ofs << real(phi[j][i]) << "\t";
+    //    }
+    //    ofs << endl;
+    //}
 
-    ofs.close();
+    //ofs.close();
 
     fftw_destroy_plan(plan_for);
     fftw_destroy_plan(plan_back);
