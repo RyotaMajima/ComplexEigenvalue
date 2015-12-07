@@ -33,7 +33,7 @@ const int N = 512; //空間分割数
 const double DELTA_X = L / N;
 
 const double T_END = 50; //終了時刻
-const int TN = T_END * 2; //時間分割数
+const int TN = T_END * 10; //時間分割数
 const double dt = T_END / TN; //時間刻み幅
 
 const double S = 0.9; //波束の幅
@@ -313,7 +313,7 @@ int main(){
 
     //ファイル書き込み
     for (int i = 0; i < N; i++){
-        ofs << i2x(i) + X_BEGIN << "\t" << V(i2x(i) + X_BEGIN) << "\t";
+        ofs << i2x(i) << "\t" << V(i2x(i)) << "\t";
         for (int j = 0; j < peakNum; j++) {
             ofs << real(phi[j][i]) << "\t";
         }
