@@ -131,8 +131,8 @@ void timeEvolution(vC &f, fftw_plan plan_for, fftw_plan plan_back){
 //複素エネルギーピークのインデックスを求める関数
 void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double>> &res){
     //微分値が正から負に変わったところの値とインデックス
-    for (int i = 1; i < EN_real - 1; i++){
-        for (int j = 1; j < EN_imag - 1; j++){
+    for (int i = 1; i < EN_real; i++){
+        for (int j = 1; j < EN_imag; j++){
             if (res[i - 1][j] < res[i][j] && res[i][j] > res[i + 1][j] && res[i][j - 1] < res[i][j] && res[i][j] > res[i][j + 1]){
                 peak.push_back(make_tuple(res[i][j], i, j));
             }
@@ -180,7 +180,7 @@ void getComplexEigenfunction(vC &phi, vC &f, fftw_plan plan_for, fftw_plan plan_
 int main(){
     auto start = system_clock::now();
     vC f(N);
-    vvvC C(EN_real, vvC(EN_imag, vC(N)));
+    vvvC C(EN_real + 1, vvC(EN_imag + 1, vC(N)));
 
     //順方向Fourier変換
     fftw_plan plan_for = fftw_plan_dft_1d(N, fftwcast(f.data()), fftwcast(f.data()), FFTW_FORWARD, FFTW_MEASURE);
@@ -216,8 +216,8 @@ int main(){
 
         ofs.close();
 
-        for (int j = 0; j < EN_real; j++){
-            for (int k = 0; k < EN_imag; k++){
+        for (int j = 0; j <= EN_real; j++){
+            for (int k = 0; k <= EN_imag; k++){
                 for (int l = 0; l < N; l++){
                     C[j][k][l] += f[k] * polar(dt, i2E(E_BEGIN_real, j, dE_real) * (i * dt)) * exp(-i2E(E_BEGIN_imag, k, dE_imag) * (i * dt));
                 }
@@ -245,8 +245,8 @@ int main(){
 
     vector<vector<double>> res_complex(EN_real, vector<double>(EN_imag));
     ofs << scientific;
-    for (int i = 0; i < EN_real; i++){
-        for (int j = 0; j < EN_imag; j++){
+    for (int i = 0; i <= EN_real; i++){
+        for (int j = 0; j <= EN_imag; j++){
             res_complex[i][j] = simpson(C[i][j]);
             ofs << i2E(E_BEGIN_real, i, dE_real) << "\t";
             ofs << i2E(E_BEGIN_imag, j, dE_imag) << "\t";
