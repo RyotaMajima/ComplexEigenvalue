@@ -29,10 +29,10 @@ inline fftw_complex* fftwcast(Complex* f){ return reinterpret_cast<fftw_complex*
 
 const double X_BEGIN = -5.0, X_END = 25.0; //Œn‚Ì—¼’[
 const double L = X_END - X_BEGIN; //‹óŠÔ•
-const int N = 512; //‹óŠÔ•ªŠ„”
+const int N = 256; //‹óŠÔ•ªŠ„”
 const double DELTA_X = L / N;
 
-const double T_END = 400; //I—¹Žž
+const double T_END = 100; //I—¹Žž
 const int TN = T_END * 10; //ŽžŠÔ•ªŠ„”
 const double dt = T_END / TN; //ŽžŠÔ‚Ý•
 

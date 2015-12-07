@@ -5,7 +5,7 @@ set multiplot layout 4,1
 
 set xran [-2.0:0.0]
 set yran [-0.02:0.02]
-z_max = 2.0
+z_max = 1.8
 set zran [0:z_max]; set cbra [0:z_max]
 set xla "Re \\{E\\}"
 set yla "Im \\{E\\}"
@@ -31,8 +31,8 @@ pl "./output/energy_complex_T_50.txt" ti "" wi image
 
 uns label
 set label 1 "-1.02 - 0.0111i" front at first -1.15, 0.0 tc rgb "white"
-set label 2 "-0.155 - 0.0087i" front at first -0.4, 0.0 tc rgb "white"
-set label 3 "-0.16 - 0.0127i" front at first -0.4, -0.017 tc rgb "white"
+set label 2 "-0.156 - 0.0087i" front at first -0.4, 0.0 tc rgb "white"
+set label 3 "-0.156 - 0.0127i" front at first -0.4, -0.017 tc rgb "white"
 
 set title "peak of complex energy eigenvalue (T = 100)"
 pl "./output/energy_complex_T_100.txt" ti "" wi image
@@ -45,8 +45,8 @@ set title "peak of complex energy eigenvalue (T = 200)"
 pl "./output/energy_complex_T_200.txt" ti "" wi image
 
 unset label
-set label 1 "-1.02 - 0.0i" front at first -1.2, 0.01 tc rgb "white"
-set label 2 "-0.155 - 0.0i" front at first -0.4, 0.01 tc rgb "white"
+set label 1 "-1.02 - 0.011i" front at first -1.15, 0.0 tc rgb "white"
+set label 2 "-0.156 - 0.086i" front at first -0.4, 0.0 tc rgb "white"
 
 set title "peak of complex energy eigenvalue (T = 400)"
 pl "./output/energy_complex_T_400.txt" ti "" wi image
