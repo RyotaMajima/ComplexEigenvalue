@@ -29,7 +29,7 @@ inline fftw_complex* fftwcast(Complex* f){ return reinterpret_cast<fftw_complex*
 
 const double X_BEGIN = -5.0, X_END = 25.0; //Œn‚Ì—¼’[
 const double L = X_END - X_BEGIN; //‹óŠÔ•
-const int N = 256; //‹óŠÔ•ªŠ„”
+const int N = 512; //‹óŠÔ•ªŠ„”
 const double DELTA_X = L / N;
 
 const double T_END = 50; //I—¹Žž
@@ -228,8 +228,8 @@ int main(){
         timeEvolution(f, plan_for, plan_back);
     }
 
-    for (int i = 0; i < EN_real; i++){
-        for (int j = 0; j < EN_imag; j++){
+    for (int i = 0; i <= EN_real; i++){
+        for (int j = 0; j <= EN_imag; j++){
             for (int k = 0; k < N; k++){
                 C[i][j][k] *= exp(-fabs(i2E(E_BEGIN_imag, j, dE_imag)) * T_END) / T_END;
             }
@@ -243,7 +243,7 @@ int main(){
         exit(1);
     }
 
-    vector<vector<double>> res_complex(EN_real, vector<double>(EN_imag));
+    vector<vector<double>> res_complex(EN_real + 1, vector<double>(EN_imag + 1));
     ofs << scientific;
     for (int i = 0; i <= EN_real; i++){
         for (int j = 0; j <= EN_imag; j++){
@@ -317,6 +317,9 @@ int main(){
     }
 
     ofs.close();
+
+    fftw_destroy_plan(plan_for);
+    fftw_destroy_plan(plan_back);
 
     auto end = system_clock::now();
     auto dur = end - start;
