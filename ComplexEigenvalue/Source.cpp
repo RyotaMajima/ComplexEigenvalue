@@ -146,6 +146,7 @@ void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double
     //しきい値以下の要素を削除
     peak.erase(remove_if(peak.begin(), peak.end(), [E_th](tuple<double, int, int> tuple) {return get<0>(tuple) < E_th; }), peak.end());
 
+    //実部の小さい順にソート
     sort(peak.begin(), peak.end(), [](const tuple<double, int, int> &i, const tuple<double, int, int> &j){ return get<1>(i) < get<1>(j); });
 
     //得られたピーク値を表示
