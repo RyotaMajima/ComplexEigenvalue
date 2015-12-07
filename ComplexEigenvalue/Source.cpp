@@ -32,8 +32,8 @@ const double L = X_END - X_BEGIN; //‹óŠÔ•
 const int N = 512; //‹óŠÔ•ªŠ„”
 const double DELTA_X = L / N;
 
-const double T_END = 50; //I—¹
-const int TN = T_END * 10; //ŠÔ•ªŠ„”
+const double T_END = 400; //I—¹
+const int TN = T_END * 2; //ŠÔ•ªŠ„”
 const double dt = T_END / TN; //ŠÔ‚İ•
 
 const double S = 0.9; //”g‘©‚Ì•
@@ -287,7 +287,7 @@ int main(){
     }
 
     for (int i = 0; i < N; i++){
-        ofs << i2x(i) + X_BEGIN << "\t";
+        ofs << i2x(i) << "\t";
         for (int j = 0; j < 2; j++){
             ofs << ho[j][i] << "\t";
         }
