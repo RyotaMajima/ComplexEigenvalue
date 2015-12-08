@@ -6,7 +6,7 @@ set multiplot layout 4,1
 set xran [-2.0:0.0]
 set yran [-0.02:0.02]
 z_max = 1.8
-set zran [0:z_max]; set cbra [0:z_max]
+#set zran [0:z_max]; set cbra [0:z_max]
 set xla "Re \\{E\\}"
 set yla "Im \\{E\\}"
 
@@ -26,8 +26,8 @@ set label 2 "-1.02 - 0.0111i" front at first -1.15, 0.0 tc rgb "white"
 set label 3 "-0.156 - 0.0087i" front at first -0.4, 0.0 tc rgb "white"
 set label 4 "-0.156 - 0.0127i" front at first -0.4, -0.017 tc rgb "white"
 
-set title "peak of complex energy eigenvalue (T = 100)"
-pl "./output/energy_complex_T_100.txt" ti "" wi image
+set title "peak of complex energy eigenvalue (T = 50)"
+pl "./output/energy_complex_T_50.txt" ti "" wi image
 
 unset label
 
@@ -36,7 +36,7 @@ set grid lw 2
 set xla "x"; set yla "|{/Symbol F}(x)|^{2}"
 se sty fill trans solid 0.5 nobor
 
-filename = "./output/phi_100.txt"
+filename = "./output/phi_50.txt"
 
 set title "{/Symbol e} = -1.02 - 0.0111i"
 pl filename us 1:2 w l ti "V(x)" lc rgb "black" lw 2, \
