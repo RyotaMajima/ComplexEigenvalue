@@ -29,11 +29,11 @@ inline fftw_complex* fftwcast(Complex* f){ return reinterpret_cast<fftw_complex*
 
 const double X_BEGIN = -5.0, X_END = 25.0; //Œn‚Ì—¼’[
 const double L = X_END - X_BEGIN; //‹óŠÔ•
-const int N = 1024; //‹óŠÔ•ªŠ„”
+const int N = 256; //‹óŠÔ•ªŠ„”
 const double DELTA_X = L / N;
 
 const double T_END = 50; //I—¹Žž
-const int TN = T_END * 10; //ŽžŠÔ•ªŠ„”
+const int TN = T_END * 2; //ŽžŠÔ•ªŠ„”
 const double dt = T_END / TN; //ŽžŠÔ‚Ý•
 
 const double S = 0.9; //”g‘©‚Ì•
@@ -45,7 +45,7 @@ const double E_BEGIN_real = -1.2, E_END_real = 0.0;
 const int EN_real = 200;
 const double dE_real = (E_END_real - E_BEGIN_real) / EN_real;
 
-const double E_BEGIN_imag = -0.02, E_END_imag = 0.02;
+const double E_BEGIN_imag = -1.0, E_END_imag = 0.0;
 const int EN_imag = 200;
 const double dE_imag = (E_END_imag - E_BEGIN_imag) / EN_imag;
 
@@ -220,7 +220,7 @@ int main(){
         for (int j = 0; j <= EN_real; j++){
             for (int k = 0; k <= EN_imag; k++){
                 for (int l = 0; l < N; l++){
-                    C[j][k][l] += f[k] * polar(dt, i2E(E_BEGIN_real, j, dE_real) * (i * dt)) * exp(-i2E(E_BEGIN_imag, k, dE_imag) * (i * dt));
+                    C[j][k][l] += f[l] * polar(dt, i2E(E_BEGIN_real, j, dE_real) * (i * dt)) * exp(-i2E(E_BEGIN_imag, k, dE_imag) * (i * dt));
                 }
             }
         }
