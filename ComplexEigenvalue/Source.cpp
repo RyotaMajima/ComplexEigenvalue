@@ -32,7 +32,7 @@ const double L = X_END - X_BEGIN; //空間幅
 const int N = 256; //空間分割数
 const double DELTA_X = L / N;
 
-const double T_END = 50; //終了時刻
+const double T_END = 10; //終了時刻
 const int TN = T_END * 2; //時間分割数
 const double dt = T_END / TN; //時間刻み幅
 
@@ -41,11 +41,11 @@ const double X = -0.5; //初期波束の原点からのずれ
 const double X_OPT = 4.0; //光学ポテンシャルをかける位置
 const double b = 1.0 / 3.0; //3次ポテンシャルの係数
 
-const double E_BEGIN_real = -1.2, E_END_real = 0.0;
-const int EN_real = 200;
+const double E_BEGIN_real = -1.1, E_END_real = -1.0;
+const int EN_real = 50;
 const double dE_real = (E_END_real - E_BEGIN_real) / EN_real;
 
-const double E_BEGIN_imag = -1.0, E_END_imag = 0.0;
+const double E_BEGIN_imag = -0.5, E_END_imag = -0.1;
 const int EN_imag = 200;
 const double dE_imag = (E_END_imag - E_BEGIN_imag) / EN_imag;
 
@@ -141,24 +141,29 @@ void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double
 
     //ピーク値の大きい順にソート
     sort(peak.begin(), peak.end(), [](const tuple<double, int, int> &i, const tuple<double, int, int> &j){ return get<0>(i) > get<0>(j); });
+    if (peak.empty()){
+        cout << "no peak" << endl;
+        exit(1);
+    }
+    else{
+        double E_th = get<0>(peak[0]) / 10; //しきい値
+        //しきい値以下の要素を削除
+        peak.erase(remove_if(peak.begin(), peak.end(), [E_th](tuple<double, int, int> tuple) {return get<0>(tuple) < E_th; }), peak.end());
 
-    double E_th = get<0>(peak[0]) / 10; //しきい値
-    //しきい値以下の要素を削除
-    peak.erase(remove_if(peak.begin(), peak.end(), [E_th](tuple<double, int, int> tuple) {return get<0>(tuple) < E_th; }), peak.end());
+        //実部の小さい順にソート
+        sort(peak.begin(), peak.end(), [](const tuple<double, int, int> &i, const tuple<double, int, int> &j){ return get<1>(i) < get<1>(j); });
 
-    //実部の小さい順にソート
-    sort(peak.begin(), peak.end(), [](const tuple<double, int, int> &i, const tuple<double, int, int> &j){ return get<1>(i) < get<1>(j); });
+        //得られたピーク値を表示
+        cout << "---- complex ver. ----" << endl << endl;
 
-    //得られたピーク値を表示
-    cout << "---- complex ver. ----" << endl << endl;
-
-    cout << "threshold value : " << E_th << endl;
-    cout << "Re" << "\t" << "Im" << "\t" << "peak value" << endl;
-    cout << setprecision(4);
-    for (auto tuple : peak){
-        cout << i2E(E_BEGIN_real, get<1>(tuple), dE_real) << "\t";
-        cout << i2E(E_BEGIN_imag, get<2>(tuple), dE_imag) << "\t";
-        cout << get<0>(tuple) << endl;
+        cout << "threshold value : " << E_th << endl;
+        cout << "Re" << "\t" << "Im" << "\t" << "peak value" << endl;
+        cout << setprecision(4);
+        for (auto tuple : peak){
+            cout << i2E(E_BEGIN_real, get<1>(tuple), dE_real) << "\t";
+            cout << i2E(E_BEGIN_imag, get<2>(tuple), dE_imag) << "\t";
+            cout << get<0>(tuple) << endl;
+        }
     }
 }
 
@@ -256,9 +261,10 @@ int main(){
         ofs << endl;
     }
 
-    ofs.close();
+    ofs.close();;
 
     vector<tuple<double, int, int>> peak_complex; //ピーク値と実部・虚部のインデックスを格納するtuple
+
     getComplexPeaks(peak_complex, res_complex); //固有値のピークの探索
 
     int peakNum = peak_complex.size();
