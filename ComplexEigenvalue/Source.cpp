@@ -45,7 +45,7 @@ const double E_BEGIN_real = -1.1, E_END_real = -1.0;
 const int EN_real = 50;
 const double dE_real = (E_END_real - E_BEGIN_real) / EN_real;
 
-const double E_BEGIN_imag = -0.5, E_END_imag = -0.1;
+const double E_BEGIN_imag = -0.5, E_END_imag = 0.5;
 const int EN_imag = 200;
 const double dE_imag = (E_END_imag - E_BEGIN_imag) / EN_imag;
 
@@ -160,9 +160,9 @@ void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double
         cout << "Re" << "\t" << "Im" << "\t" << "peak value" << endl;
         cout << setprecision(4);
         for (auto tuple : peak){
-            cout << i2E(E_BEGIN_real, get<1>(tuple), dE_real) << "\t";
-            cout << i2E(E_BEGIN_imag, get<2>(tuple), dE_imag) << "\t";
-            cout << get<0>(tuple) << endl;
+            double Re = i2E(E_BEGIN_real, get<1>(tuple), dE_real);
+            double Im = i2E(E_BEGIN_imag, get<2>(tuple), dE_imag);
+            printf("%lf \t %lf \t %lf\n", Re, Im, get<0>(tuple));
         }
     }
 }
