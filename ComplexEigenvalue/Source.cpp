@@ -333,10 +333,7 @@ int main(){
     auto sec = duration_cast<seconds>(dur).count();
     auto min = duration_cast<minutes>(dur).count();
 
-    cout << endl;
-    cout << "execution time : " << sec << "sec" << " ";
-    cout << "(" << min << "min)" << endl;
-    cout << endl;
+    printf("\nexecution time : %dsec (%dmin)\n\n", sec, min);
     
     return 0;
 }
