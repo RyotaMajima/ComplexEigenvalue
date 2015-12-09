@@ -158,11 +158,10 @@ void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double
 
         cout << "threshold value : " << E_th << endl;
         cout << "Re" << "\t" << "Im" << "\t" << "peak value" << endl;
-        cout << setprecision(4);
         for (auto tuple : peak){
             double Re = i2E(E_BEGIN_real, get<1>(tuple), dE_real);
             double Im = i2E(E_BEGIN_imag, get<2>(tuple), dE_imag);
-            printf("%lf \t %lf \t %lf\n", Re, Im, get<0>(tuple));
+            printf("%.3lf\t%.3lf\t%.3lf\n", Re, Im, get<0>(tuple));
         }
     }
 }
