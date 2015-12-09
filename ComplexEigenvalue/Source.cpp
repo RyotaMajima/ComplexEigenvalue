@@ -156,7 +156,7 @@ void getComplexPeaks(vector<tuple<double, int, int>> &peak, vector<vector<double
         //得られたピーク値を表示
         cout << "---- complex ver. ----" << endl << endl;
 
-        cout << "threshold value : " << E_th << endl;
+        cout << "threshold value : " << E_th << endl << endl;
         cout << "Re" << "\t" << "Im" << "\t" << "peak value" << endl;
         for (auto tuple : peak){
             double Re = i2E(E_BEGIN_real, get<1>(tuple), dE_real);
